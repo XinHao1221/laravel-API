@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
@@ -30,6 +31,8 @@ class AuthController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
+
+        event(new Registered($user));
 
         // Create token
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -71,5 +74,12 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
             'access_token' => $token,
         ]);
+    }
+
+    public function verifyEmail($userId, Request $request)
+    {
+
+        // 
+
     }
 }
