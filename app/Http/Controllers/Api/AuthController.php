@@ -76,10 +76,12 @@ class AuthController extends Controller
         ]);
     }
 
-    public function verifyEmail($userId, Request $request)
+    public function me(Request $request)
     {
+        $user = Auth::user();
 
-        // 
-
+        return response()->json([
+            "user" => $user,
+        ]);
     }
 }

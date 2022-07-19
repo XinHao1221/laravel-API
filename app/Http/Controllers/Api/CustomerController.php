@@ -13,6 +13,7 @@ use App\Http\Resources\CustomerResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 
 class CustomerController extends Controller
 {
@@ -48,10 +49,16 @@ class CustomerController extends Controller
 
     public function bulkStore(BulkStoreInvoiceRequest $request)
     {
-        Customer::insert($request->toArray());
+        // Talk out postalCode from $request
+        $bulk = collect($request->all())->map(function ($arr) {
+            return Arr::except($arr, ['postalCode']);
+        });
+
+        // Perform bulk insert
+        Customer::insert($bulk->toArray());
 
         return response()->json([
-            "message" => "test"
+            "data" => "Record insert successfully."
         ]);
     }
 
