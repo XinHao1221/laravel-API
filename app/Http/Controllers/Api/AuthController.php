@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\CustomerExistException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterUserRequest;
@@ -20,9 +21,7 @@ class AuthController extends Controller
 
         // Check if the email already registered
         if ($this->userExists($validated['email'])) {
-            return response()->json([
-                "message" => "Email already registered.",
-            ]);
+            throw new CustomerExistException();
         }
 
         // Create new user

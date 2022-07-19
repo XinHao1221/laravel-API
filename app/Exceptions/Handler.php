@@ -50,29 +50,37 @@ class Handler extends ExceptionHandler
     }
 
 
-    // public function render($request, Throwable $e)
-    // {
-    //     if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
-    //         return response()->json([
-    //             'data' => [
-    //                 'message' => 'Resource not found',
-    //                 'status_code' => Response::HTTP_NOT_FOUND
-    //             ]
-    //         ], Response::HTTP_NOT_FOUND);
-    //     } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
-    //         return response()->json([
-    //             'data' => [
-    //                 'message' => 'Endpoint not found',
-    //                 'status_code' => Response::HTTP_NOT_FOUND
-    //             ]
-    //         ], Response::HTTP_NOT_FOUND);
-    //     }
+    public function render($request, Throwable $e)
+    {
+        // if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+        //     return response()->json([
+        //         'data' => [
+        //             'message' => 'Resource not found',
+        //             'status_code' => Response::HTTP_NOT_FOUND
+        //         ]
+        //     ], Response::HTTP_NOT_FOUND);
+        // } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+        //     return response()->json([
+        //         'data' => [
+        //             'message' => 'Endpoint not found',
+        //             'status_code' => Response::HTTP_NOT_FOUND
+        //         ]
+        //     ], Response::HTTP_NOT_FOUND);
+        // }
 
-    //     return response()->json([
-    //         'data' => [
-    //             'message' => $e->getMessage(),
-    //             'status_code' => Response::HTTP_BAD_REQUEST
-    //         ]
-    //     ], Response::HTTP_BAD_REQUEST);
-    // }
+        // return response()->json([
+        //     'data' => [
+        //         'message' => $e->getMessage(),
+        //         'status_code' => Response::HTTP_BAD_REQUEST
+        //     ]
+        // ], Response::HTTP_BAD_REQUEST);
+
+        if ($e instanceof CustomerExistException) {
+            return response()->json([
+                "message" => "Email already registered.",
+            ]);
+        }
+
+        return parent::render($request, $e);
+    }
 }
