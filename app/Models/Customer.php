@@ -16,5 +16,11 @@ class Customer extends Model
         'city',
         'postal_code',
         'country',
+        'user_id',
     ];
+
+    public function customers()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

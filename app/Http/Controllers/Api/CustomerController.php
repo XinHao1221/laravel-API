@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Exceptions\CustomerNotFoundException;
 use App\Models\Customer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BulkStoreInvoiceRequest;
@@ -10,10 +9,9 @@ use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Http\Resources\CustomerCollection;
 use App\Http\Resources\CustomerResource;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
@@ -80,7 +78,14 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-        return new CustomerResource(Customer::create($request->all()));
+        // Get current logged in user's id
+        $userId = Auth::user()->id;
+
+        // Add user_id into request
+        $request["user_id"] = $userId;
+
+        // Store the newly created customer record
+        return new CustomerResource(Customer::create(array_merge($request->all())));
     }
 
     /**
