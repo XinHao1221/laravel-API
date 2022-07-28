@@ -44,8 +44,11 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (Throwable $e, $request) {
+            // Custom message for not found exception
+            if ($request->is('api/*')) {
+                return response()->json(["message" => "Object not found."], 404);
+            }
         });
     }
 
